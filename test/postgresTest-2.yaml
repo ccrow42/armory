@@ -1,0 +1,45 @@
+apiVersion: v1
+items:
+- apiVersion: deployments.pds.io/v1
+  kind: Postgresql
+  metadata:
+    labels:
+      name: pg-demo4
+      namespace: pds-test
+      #pds/deployment-id: e0958804-0871-43df-9abf-3e22217efbec
+      pds/deployment-name: pg-demo4
+      pds/environment: pds-test
+      #pds/project-id: fd53fa1a-eb68-4d39-98ae-e2cf12dd8ed2
+    name: pg-demo4
+    namespace: pds-test
+  spec:
+    configuration:
+      PG_DATABASE: pds
+    dnsZone: sales-staging.pds-dns.io
+    image: docker.io/portworx/pds-postgresql
+    imageBuild: 8c5a18d
+    initialize: Once
+    nodes: 1
+    resources:
+      limits:
+        cpu: "2"
+        memory: 4G
+      requests:
+        cpu: "1"
+        memory: 2G
+        storage: 100G
+    serviceType: LoadBalancer
+    storageClass:
+      provisioner: pxd.portworx.com
+    storageOptions:
+      filesystem: xfs
+      forceSpread: "false"
+      replicas: "2"
+      secure: "false"
+    tlsEnabled: false
+    tlsIssuer: ""
+    version: 14.6-8c5a18d
+    versionName: "14.6"
+kind: List
+metadata:
+  resourceVersion: ""
