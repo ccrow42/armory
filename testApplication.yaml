@@ -1,0 +1,24 @@
+version: v1
+kind: kubernetes
+application: postgres
+
+targets:
+  ccrow-eks01-test:
+    account: ccrow-eks01-test
+    namespace: default
+    strategy: myCanary
+
+manifests:
+  - path: manifests/postgres
+
+strategies:
+  myCanary:
+    canary:
+      steps:
+        - setWeight:
+            weight: 50
+        - pause:
+            untilApproved: true
+        - setWeight:
+            weight: 100
+
