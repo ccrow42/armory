@@ -5,7 +5,7 @@ application: postgres
 targets:
   ccrow-eks01-test:
     account: ccrow-eks01-test
-    namespace: default
+    namespace: pds-prod
     strategy: myCanary
 
 manifests:

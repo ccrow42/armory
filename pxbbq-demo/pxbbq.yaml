@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment                 
+metadata:
+  name: pxbbq-web  
+  namespace: pxbbq         
+spec:
+  replicas: 1                    
+  selector:
+    matchLabels:
+      app: pxbbq-web
+  template:                      
+    metadata:
+      labels:                    
+        app: pxbbq-web
+    spec:                        
+      containers:
+      - name: pxbbq
+        image: eshanks16/pxbbq:v3.0
+        env:
+        - name: MONGO_INIT_USER
+          value: "pds"
+        - name: MONGO_INIT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mdb-ex01-zvsn17-creds
+              key: password
+        - name: MONGO_NODES
+          value: "mdb-ex01-zvsn17-pxbbq-0-vip.sales-prod.pds-dns.io,mdb-ex01-zvsn17-pxbbq-1-vip.sales-prod.pds-dns.io"
+        - name: MONGO_USER
+          value: "pds"
+        - name: MONGO_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mdb-ex01-zvsn17-creds
+              key: password
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pxbbq-svc
+  namespace: pxbbq
+  labels:
+    app: pxbbq-web
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer
+  selector:
+    app: pxbbq-web
