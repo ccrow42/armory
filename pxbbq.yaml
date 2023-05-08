@@ -3,7 +3,7 @@ kind: kubernetes
 application: postgres
 
 targets:
-  ccrow-eks01-test:
+  eks02-prod:
     account: eks02-prod
     namespace: pxbbq
     strategy: myCanary
