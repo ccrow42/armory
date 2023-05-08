@@ -9,7 +9,8 @@ targets:
     strategy: myCanary
 
 manifests:
-  - path: pxbbq-demo
+  - path: pxbbq-demo/mongodb.yaml
+  - path: pxbbq-demo/pxbbq.yaml
 
 strategies:
   myCanary:
