@@ -1,0 +1,24 @@
+version: v1
+kind: kubernetes
+application: postgres
+
+targets:
+  ccrow-eks01-test:
+    account: eks02-prod
+    namespace: pxbbq
+    strategy: myCanary
+
+manifests:
+  - path: pxbbq-demo
+
+strategies:
+  myCanary:
+    canary:
+      steps:
+        - setWeight:
+            weight: 50
+        - pause:
+            untilApproved: true
+        - setWeight:
+            weight: 100
+

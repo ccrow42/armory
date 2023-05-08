@@ -4,13 +4,13 @@ items:
   kind: Mongodb
   metadata:
     labels:
-      name: mdb01
+      #name: mdb01
       namespace: pxbbq
       #pds/deployment-id: 01838802-2963-4811-9524-be1cf860a858
-      pds/deployment-name: mdb01
-      pds/environment: pxbbq
+      #pds/deployment-name: mdb01
+      #pds/environment: pxbbq
       #pds/project-id: ef41cd33-3726-4392-b068-a54978daade9
-    name: mdb-ex01-zvsn17
+    name: mdb01
     namespace: pxbbq
   spec:
     dnsZone: sales-prod.pds-dns.io
