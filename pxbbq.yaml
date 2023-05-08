@@ -1,6 +1,6 @@
 version: v1
 kind: kubernetes
-application: postgres
+application: pxbbq
 
 targets:
   eks02-prod:
