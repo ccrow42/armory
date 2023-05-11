@@ -30,7 +30,7 @@ spec:
         - name: MONGO_NODES
           value: "mdb01-pxbbq-0-vip,mdb01-pxbbq-1-vip"
         - name: MONGO_USER
-          value: "pds"
+          value: "pxbbquser"
         - name: MONGO_PASS
           valueFrom:
             secretKeyRef:
