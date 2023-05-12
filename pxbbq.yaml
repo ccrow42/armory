@@ -28,7 +28,9 @@ targets:
 
 manifests:
   - path: pxbbq-demo/mongodb.yaml
+    targets: [eks03-prod]
   - path: pxbbq-demo/pxbbq.yaml
+    targets: [eks03-prod]
   - path: pxbbq-demo/migrate.yaml
     targets: ['Migrate Prod DB To Staging']
   
