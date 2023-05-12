@@ -1,4 +1,4 @@
-name: Deploy my latest version
+name: Deploy Demo Utilities
 
 on: 
     workflow_dispatch: {}
