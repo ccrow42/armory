@@ -25,7 +25,9 @@ targets:
 manifests:
   - path: pxbbq-demo/mongodb.yaml
   - path: pxbbq-demo/pxbbq.yaml
-
+  #- path: pxbbq-demo/migrate.yaml
+  #  targets:['Migrate Prod DB To Staging']
+  
 strategies:
   myCanary:
     canary:
