@@ -38,8 +38,8 @@ strategies:
       steps:
         - setWeight:
             weight: 50
-        - pause:
-            untilApproved: true
+        #- pause:
+        #    untilApproved: true
         - setWeight:
             weight: 100
             
