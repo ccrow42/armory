@@ -10,3 +10,5 @@ spec:
   namespaces:
     - pxbbq
   purgeDeletedResources: false
+  excludeSelectors: 
+    app: pxbbq-web
