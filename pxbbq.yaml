@@ -10,7 +10,7 @@ targets:
     constraints:
       dependsOn:
       - "Migrate Prod DB To Staging"
-      #- staging
+      - staging
   "Migrate Prod DB To Staging":
     account: eks03-prod
     namespace: portworx
@@ -19,13 +19,16 @@ targets:
       afterDeployment:
       - runWebhook:
           name: Wait for DB Migration
-  #staging:
-  #  account: eks01-staging
-  #  namespace: pxbbq
-  #  strategy: myCanary
-  #  constraints:
-  #    dependsOn:
-  #    - "Migrate Prod DB To Staging"
+  staging:
+    account: eks01-staging
+    namespace: pxbbq
+    strategy: myCanary
+    constraints:
+      dependsOn:
+      - "Migrate Prod DB To Staging"
+      beforeDeployment:
+      - runWebhook:
+          name: Delete DB Migration
 
 manifests:
   - path: pxbbq-demo/mongodb.yaml
@@ -56,6 +59,18 @@ webhooks:
          }
     method: POST
     name: Wait for DB Migration
+    networkMode: remoteNetworkAgent
+    retryCount: 3
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
+  - agentIdentifier: eks03-prod
+    bodyTemplate:
+      inline: |-
+        { "cmd": "kubectl",
+          "arg": "delete -n=portworx migration/migrate01",
+          "callbackURL": "{{armory.callbackUri}}/callback"
+         }
+    method: POST
+    name: Delete DB Migration
     networkMode: remoteNetworkAgent
     retryCount: 3
     uriTemplate: http://cmd-hook.armory-rna:8081/cmd
