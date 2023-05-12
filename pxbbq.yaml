@@ -20,7 +20,7 @@ targets:
       - runWebhook:
           name: Wait for DB Migration
   staging:
-    account: eks01-staging
+    account: eks01-stage
     namespace: pxbbq
     strategy: myCanary
     constraints:
