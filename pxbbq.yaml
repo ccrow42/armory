@@ -51,7 +51,7 @@ webhooks:
     bodyTemplate:
       inline: |-
         { "cmd": "kubectl",
-          "arg": "wait -n=portworx migration/migrate01 --for=jsonpath='{.status.status}'=Successful --timeout=30m",
+          "arg": "wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=30m",
           "callbackURL": "{{armory.callbackUri}}/callback"
          }
     method: POST
