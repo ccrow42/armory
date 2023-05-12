@@ -3,15 +3,15 @@ kind: kubernetes
 application: pxbbq
 
 targets:
-  eks02-prod:
-    account: eks02-prod
+  eks03-prod:
+    account: eks03-prod
     namespace: pxbbq
     strategy: myCanary
   #  constraints:
   #    dependsOn:
   #    - staging
   #"Migrate Prod DB To Staging":
-  #  account: eks02-prod
+  #  account: eks03-prod
   #  namespace: pxbbq
   #  strategy: myCanary
   #staging:

@@ -21,6 +21,7 @@ spec:
   stork:
     enabled: true
     args:
+      admin-namespace: portworx
       webhook-controller: "true"
   autopilot:
     enabled: true

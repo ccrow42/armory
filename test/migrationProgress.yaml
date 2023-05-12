@@ -1,0 +1,60 @@
+apiVersion: v1
+items:
+- apiVersion: stork.libopenstorage.org/v1alpha1
+  kind: Migration
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"stork.libopenstorage.org/v1alpha1","kind":"Migration","metadata":{"annotations":{},"name":"migrate01","namespace":"portworx"},"spec":{"clusterPair":"stage","includeResources":true,"namespaces":["heimdall"],"purgeDeletedResources":false,"startApplications":true}}
+    creationTimestamp: "2023-05-12T17:07:32Z"
+    finalizers:
+    - stork.libopenstorage.org/finalizer-cleanup
+    generation: 169
+    name: migrate01
+    namespace: portworx
+    resourceVersion: "192606"
+    uid: c2d5a03e-67a2-4a3c-b7e8-9b2920690706
+  spec:
+    adminClusterPair: ""
+    clusterPair: stage
+    excludeSelectors: null
+    includeNetworkPolicyWithCIDR: false
+    includeOptionalResourceTypes: null
+    includeResources: true
+    includeVolumes: true
+    namespaces:
+    - heimdall
+    postExecRule: ""
+    preExecRule: ""
+    purgeDeletedResources: false
+    selectors: null
+    skipDeletedNamespaces: true
+    skipServiceUpdate: false
+    startApplications: true
+    transformSpecs: null
+  status:
+    finishTimestamp: null
+    resourceMigrationFinishTimestamp: null
+    resources: null
+    stage: Volumes
+    status: InProgress
+    summary:
+      elapsedTimeForResourceMigration: NA
+      elapsedTimeForVolumeMigration: 32.843168386s
+      numOfMigratedResources: 0
+      numOfMigratedVolumes: 0
+      totalBytesMigrated: 0
+      totalNumberOfResources: 0
+      totalNumberOfVolumes: 1
+    volumeMigrationFinishTimestamp: null
+    volumes:
+    - bytesTotal: 6553600
+      namespace: heimdall
+      persistentVolumeClaim: heimdall-pvc
+      reason: 'Volume migration has started. Backup in progress. BytesDone: 0 BytesTotal:
+        6553600 ETA: 2 seconds'
+      status: InProgress
+      volume: pvc-76c09d4f-9c85-4b1d-a316-b13ca6ff4eac
+kind: List
+metadata:
+  resourceVersion: ""
