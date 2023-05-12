@@ -7,6 +7,20 @@ targets:
     account: eks02-prod
     namespace: pxbbq
     strategy: myCanary
+  #  constraints:
+  #    dependsOn:
+  #    - staging
+  #"Migrate Prod DB To Staging":
+  #  account: eks02-prod
+  #  namespace: pxbbq
+  #  strategy: myCanary
+  #staging:
+  #  account: eks01-staging
+  #  namespace: pxbbq
+  #  strategy: myCanary
+  #  constraints:
+  #    dependsOn:
+  #    - "Migrate Prod DB To Staging"
 
 manifests:
   - path: pxbbq-demo/mongodb.yaml
