@@ -1,51 +1,12 @@
-apiVersion: deployments.pds.io/v1
-kind: Mongodb
-metadata:
-  labels:
-    #name: mdb01
-    namespace: pxbbq
-    #pds/deployment-id: 01838802-2963-4811-9524-be1cf860a858
-    #pds/deployment-name: mdb01
-    #pds/environment: pxbbq
-    #pds/project-id: ef41cd33-3726-4392-b068-a54978daade9
-  name: mdb01
-  namespace: test
-spec:
-  dnsZone: sales-prod.pds-dns.io
-  image: docker.io/portworx/pds-mongodb
-  imageBuild: c43b0e4
-  initialize: Once
-  nodes: 2
-  resources:
-    limits:
-      cpu: "2"
-      memory: 4G
-    requests:
-      cpu: "1"
-      memory: 2G
-      storage: 100G
-  serviceType: ClusterIP
-  storageClass:
-    provisioner: pxd.portworx.com
-  storageOptions:
-    filesystem: ext4
-    forceSpread: "false"
-    replicas: "2"
-    secure: "false"
-  tlsEnabled: false
-  tlsIssuer: ""
-  version: 6.0.3-c43b0e4
-  versionName: 6.0.3
----
 apiVersion: apps/v1
 kind: Deployment                 
 metadata:
   labels: 
     app: pxbbq-web
   name: pxbbq-web  
-  namespace: pxbbq         
+  namespace: test         
 spec:
-  replicas: 1                    
+  replicas: 2                    
   selector:
     matchLabels:
       app: pxbbq-web
@@ -68,7 +29,7 @@ spec:
               name: mdb01-creds
               key: password
         - name: MONGO_NODES
-          value: "mdb01-pxbbq-0-vip,mdb01-pxbbq-1-vip"
+          value: "mdb01-test-0-vip,mdb01-test-1-vip"
         - name: MONGO_USER
           value: "pxbbquser"
         - name: MONGO_PASS
@@ -84,7 +45,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: pxbbq-svc
-  namespace: pxbbq
+  namespace: test
   labels:
     app: pxbbq-web
 spec:
