@@ -9,7 +9,6 @@ targets:
     strategy: myCanary
     constraints:
       dependsOn:
-      - "Migrate Prod DB To Staging"
       - staging
   "Migrate Prod DB To Staging":
     account: eks03-prod
