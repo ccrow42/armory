@@ -15,10 +15,10 @@ targets:
     account: eks03-prod
     namespace: portworx
     strategy: myCanary
-    constraints:
-      afterDeployment:
-      - runWebhook:
-          name: Wait for DB Migration
+    #constraints:
+      #afterDeployment:
+      #- runWebhook:
+      #    name: Wait for DB Migration
   #staging:
   #  account: eks01-staging
   #  namespace: pxbbq
