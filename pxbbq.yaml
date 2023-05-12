@@ -10,10 +10,14 @@ targets:
   #  constraints:
   #    dependsOn:
   #    - staging
-  #"Migrate Prod DB To Staging":
-  #  account: eks03-prod
-  #  namespace: pxbbq
-  #  strategy: myCanary
+  "Migrate Prod DB To Staging":
+    account: eks03-prod
+    namespace: pxbbq
+    strategy: myCanary
+    constraints:
+      afterDeployment:
+      - runWebhook:
+          name: Wait for DB Migration
   #staging:
   #  account: eks01-staging
   #  namespace: pxbbq
@@ -24,9 +28,11 @@ targets:
 
 manifests:
   - path: pxbbq-demo/mongodb.yaml
+    targets: [eks03-prod]
   - path: pxbbq-demo/pxbbq.yaml
-  #- path: pxbbq-demo/migrate.yaml
-  #  targets:['Migrate Prod DB To Staging']
+    targets: [eks03-prod]
+  - path: pxbbq-demo/migrate.yaml
+    targets: ['Migrate Prod DB To Staging']
   
 strategies:
   myCanary:
@@ -34,8 +40,18 @@ strategies:
       steps:
         - setWeight:
             weight: 50
-        - pause:
-            untilApproved: true
+        #- pause:
+        #    untilApproved: true
         - setWeight:
             weight: 100
+            
+webhooks: 
+  - agentIdentifier: eks03-prod
+    bodyTemplate:
+      inline: '{ "cmd": "kubectl", "arg": "wait -n={{armory.namespace}} migration/migrate01 --for=condition=Completed --timeout=30m", "callbackURL": "{{armory.callbackUri}}/callback" }'
+    method: POST
+    name: Wait for DB Migration
+    networkMode: remoteNetworkAgent
+    retryCount: 3
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
 
