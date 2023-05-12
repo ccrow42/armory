@@ -8,6 +8,10 @@ spec:
   includeResources: true
   startApplications: true
   namespaces:
-    - heimdall # update this namespace!
+    - heimdall
+    - test
   #adminClusterPair: cluster02
   purgeDeletedResources: false
+  excludeSelectors: 
+    app: pxbbq-web
+
