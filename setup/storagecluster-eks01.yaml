@@ -1,0 +1,34 @@
+# SOURCE: https://install.portworx.com/?operator=true&mc=false&kbver=1.25.0&ns=portworx&b=true&kd=type%3Dgp3%2Csize%3D150&s=%22type%3Dgp3%2Csize%3D150%22&c=px-cluster-dee1e709-5e05-4059-80e1-92d44f4f4e82&eks=true&stork=true&csi=true&mon=true&tel=true&st=k8s&promop=true
+kind: StorageCluster
+apiVersion: core.libopenstorage.org/v1
+metadata:
+  name: px-cluster-eks01-stage
+  namespace: portworx
+  annotations:
+    portworx.io/install-source: "https://install.portworx.com/?operator=true&mc=false&kbver=1.25.0&ns=portworx&b=true&kd=type%3Dgp3%2Csize%3D150&s=%22type%3Dgp3%2Csize%3D150%22&c=px-cluster-dee1e709-5e05-4059-80e1-92d44f4f4e82&eks=true&stork=true&csi=true&mon=true&tel=true&st=k8s&promop=true"
+    portworx.io/is-eks: "true"
+    portworx.io/service-type: "portworx-api:LoadBalancer"
+spec:
+  image: portworx/oci-monitor:2.13.4
+  imagePullPolicy: Always
+  kvdb:
+    internal: true
+  cloudStorage:
+    deviceSpecs:
+    - type=gp3,size=150
+    kvdbDeviceSpec: type=gp3,size=150
+  secretsProvider: k8s
+  stork:
+    enabled: true
+    args:
+      webhook-controller: "true"
+  autopilot:
+    enabled: true
+  csi:
+    enabled: true
+  monitoring:
+    telemetry:
+      enabled: true
+    prometheus:
+      enabled: true
+      exportMetrics: true
