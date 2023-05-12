@@ -58,9 +58,10 @@ webhooks:
       #   }
       inline: |-
         { "cmd": "/bin/sh",
-          "arg": "-c \"kubectl wait -n=portworx migration/migrate01 --for=jsonpath='{.status.stage}'=Final --timeout=30m && kubectl wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=1s\"",
+          "arg": "-c \"kubectl wait -n=portworx migration/migrate01 --for=jsonpath='{.status.stage}'=Final --timeout=30m\"",
           "callbackURL": "{{armory.callbackUri}}/callback"
          }
+         # && kubectl wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=1s
     method: POST
     name: Wait for DB Migration
     networkMode: remoteNetworkAgent
