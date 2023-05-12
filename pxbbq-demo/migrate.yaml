@@ -1,0 +1,13 @@
+apiVersion: stork.libopenstorage.org/v1alpha1
+kind: Migration
+metadata:
+  name: migrate01 #update this name!
+  namespace: portworx
+spec:
+  clusterPair: stage
+  includeResources: true
+  startApplications: true
+  namespaces:
+    - pxbbq # update this namespace!
+  #adminClusterPair: cluster02
+  purgeDeletedResources: false
