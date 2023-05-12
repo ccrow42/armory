@@ -1,7 +1,7 @@
 apiVersion: stork.libopenstorage.org/v1alpha1
 kind: Migration
 metadata:
-  name: migrate01 #update this name!
+  name: migrate02-test 
   namespace: portworx
 spec:
   clusterPair: stage
@@ -10,7 +10,6 @@ spec:
   namespaces:
     - heimdall
     - test
-  #adminClusterPair: cluster02
   purgeDeletedResources: false
   excludeSelectors: 
     app: pxbbq-web
