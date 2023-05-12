@@ -3,7 +3,7 @@ kind: kubernetes
 application: pxbbq
 
 targets:
-  eks03-prod:
+  production:
     account: eks03-prod
     namespace: pxbbq
     strategy: myCanary
@@ -32,9 +32,9 @@ targets:
 
 manifests:
   - path: pxbbq-demo/mongodb.yaml
-    targets: [eks03-prod]
+    targets: [production,staging]
   - path: pxbbq-demo/pxbbq.yaml
-    targets: [eks03-prod]
+    targets: [production,staging]
   - path: pxbbq-demo/migrate.yaml
     targets: ['Migrate Prod DB To Staging']
   
