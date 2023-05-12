@@ -70,7 +70,7 @@ webhooks:
     bodyTemplate:
       inline: |-
         { "cmd": "kubectl",
-          "arg": "delete -n=portworx migration/migrate01 --ignore-not-found=true",
+          "arg": "delete -n=portworx migration/migrate01 --ignore-not-found=true -o name",
           "callbackURL": "{{armory.callbackUri}}/callback"
          }
     method: POST
