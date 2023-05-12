@@ -44,7 +44,7 @@ strategies:
             weight: 100
             
 webhooks: 
-  - agentIdentifier: {{armory.accountName}} #eks03-prod
+  - agentIdentifier: "{{armory.accountName}}" #eks03-prod
     bodyTemplate:
       inline: '{ "cmd": "kubectl", "arg": "wait -n={{armory.namespace}} migration/migrate01 --for=condition=Completed --timeout=30m", "callbackURL": "{{armory.callbackUri}}/callback" }'
     method: POST
