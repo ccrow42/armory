@@ -57,8 +57,8 @@ webhooks:
       #    "callbackURL": "{{armory.callbackUri}}/callback"
       #   }
       inline: |-
-        { "cmd": "kubectl",
-          "arg": "wait -n=portworx migration/migrate01 --for=jsonpath='{.status.stage}'=Final --timeout=30m && kubectl wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=1s",
+        { "cmd": "/bin/sh",
+          "arg": "-c \"kubectl wait -n=portworx migration/migrate01 --for=jsonpath='{.status.stage}'=Final --timeout=30m && kubectl wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=1s\"",
           "callbackURL": "{{armory.callbackUri}}/callback"
          }
     method: POST
