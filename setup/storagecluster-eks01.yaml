@@ -20,6 +20,12 @@ spec:
   secretsProvider: k8s
   stork:
     enabled: true
+    volumes:
+    - name: aws-creds
+      mountPath: /root/.aws/
+      readOnly: true
+      secret:
+        secretName: aws-creds
     args:
       admin-namespace: portworx
       webhook-controller: "true"

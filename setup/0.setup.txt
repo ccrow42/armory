@@ -25,6 +25,9 @@ k -n portworx get svc portworx-api
     token: "<token>"
 
 
-
 kubectl config use-context cluster01
+
+#create aws secret on source cluster
+kubectl create secret generic --from-file=$HOME/.aws/credentials -n portworx aws-creds
+
 kubectl apply -f ~/git/pxworkshops/setup/cluster02-migrationObject.yaml
