@@ -3,14 +3,13 @@ kind: kubernetes
 application: pxbbq
 
 targets:
-  eks03-prod:
+  production:
     account: eks03-prod
     namespace: pxbbq
     strategy: myCanary
     constraints:
       dependsOn:
-      - "Migrate Prod DB To Staging"
-      #- staging
+      - staging
   "Migrate Prod DB To Staging":
     account: eks03-prod
     namespace: portworx
@@ -19,19 +18,22 @@ targets:
       afterDeployment:
       - runWebhook:
           name: Wait for DB Migration
-  #staging:
-  #  account: eks01-staging
-  #  namespace: pxbbq
-  #  strategy: myCanary
-  #  constraints:
-  #    dependsOn:
-  #    - "Migrate Prod DB To Staging"
+      beforeDeployment:
+      - runWebhook:
+          name: Delete DB Migration
+  staging:
+    account: eks01-stage
+    namespace: pxbbq
+    strategy: myCanary
+    constraints:
+      dependsOn:
+      - "Migrate Prod DB To Staging"
 
 manifests:
   - path: pxbbq-demo/mongodb.yaml
-    targets: [eks03-prod]
+    targets: [production,staging]
   - path: pxbbq-demo/pxbbq.yaml
-    targets: [eks03-prod]
+    targets: [production,staging]
   - path: pxbbq-demo/migrate.yaml
     targets: ['Migrate Prod DB To Staging']
   
@@ -51,11 +53,28 @@ webhooks:
     bodyTemplate:
       inline: |-
         { "cmd": "kubectl",
-          "arg": "wait -n=portworx migration/migrate01 -for=jsonpath='{.status.status}'=Successful --timeout=30m",
+          "arg": "wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=30m",
+          "callbackURL": "{{armory.callbackUri}}/callback"
+         }
+      #inline: |-
+      #  { "cmd": "/bin/sh",
+      #    "arg": "-c \"kubectl wait -n=portworx migration/migrate01 --for=jsonpath='{.status.stage}'=Final --timeout=30m && kubectl wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=1s\"",
+      #    "callbackURL": "{{armory.callbackUri}}/callback"
+      #   }
+    method: POST
+    name: Wait for DB Migration
+    networkMode: remoteNetworkAgent
+    retryCount: 3
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
+  - agentIdentifier: eks03-prod
+    bodyTemplate:
+      inline: |-
+        { "cmd": "kubectl",
+          "arg": "delete -n=portworx migration/migrate01 --ignore-not-found=true -o name",
           "callbackURL": "{{armory.callbackUri}}/callback"
          }
     method: POST
-    name: Wait for DB Migration
+    name: Delete DB Migration
     networkMode: remoteNetworkAgent
     retryCount: 3
     uriTemplate: http://cmd-hook.armory-rna:8081/cmd
