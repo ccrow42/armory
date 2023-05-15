@@ -1,0 +1,85 @@
+version: v1
+kind: kubernetes
+application: pxbbq
+
+targets:
+  "Migrate Prod DB To Dev":
+    account: eks03-prod
+    namespace: portworx
+    strategy: myCanary
+    constraints:
+      afterDeployment:
+      - runWebhook:
+          name: Wait for DB Migration
+      beforeDeployment:
+      - runWebhook:
+          name: Delete DB Migration
+  dev:
+    account: eks01-stage
+    namespace: pxbbq-pr-
+    strategy: myCanary
+    constraints:
+      dependsOn:
+      - "Migrate Prod DB To Dev"
+      
+manifests:
+  - path: pxbbq-demo/mongodb.yaml
+    targets: [dev]
+  - path: pxbbq-demo/pxbbq.yaml
+    targets: [dev]
+  - path: pxbbq-demo/migrate.yaml
+    targets: ['Migrate Prod DB To Dev']
+  
+strategies:
+  myCanary:
+    canary:
+      steps:
+        - setWeight:
+            weight: 100
+            
+webhooks: 
+  - agentIdentifier: eks03-prod
+    bodyTemplate:
+      inline: |-
+        { "cmd": "kubectl",
+          "arg": "wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=30m",
+          "callbackURL": "{{armory.callbackUri}}/callback"
+         }
+      #inline: |-
+      #  { "cmd": "/bin/sh",
+      #    "arg": "-c \"kubectl wait -n=portworx migration/migrate01 --for=jsonpath='{.status.stage}'=Final --timeout=30m && kubectl wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=1s\"",
+      #    "callbackURL": "{{armory.callbackUri}}/callback"
+      #   }
+    method: POST
+    name: Wait for DB Migration
+    networkMode: remoteNetworkAgent
+    retryCount: 3
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
+  - agentIdentifier: eks03-prod
+    bodyTemplate:
+      inline: |-
+        { "cmd": "kubectl",
+          "arg": "delete -n=portworx migration/migrate01 --ignore-not-found=true -o name",
+          "callbackURL": "{{armory.callbackUri}}/callback"
+         }
+    method: POST
+    name: Delete DB Migration
+    networkMode: remoteNetworkAgent
+    retryCount: 3
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
+  - bodyTemplate:
+      inline: |-
+        { "event_type": "integrationTests", "client_payload": {
+            "callbackUri": "{{armory.callbackUri}}/callback", "service":"{{	armory.preview.potato-facts-internal}}"
+            }
+        }
+    headers:
+      - key: Authorization
+        value: token {{secrets.github_token}}
+      - key: Content-Type
+        value: application/json
+    method: POST
+    name: Integration_Tests
+    retryCount: 3
+    uriTemplate: https://api.github.com/repos/ccrow42/armory/dispatches
+
