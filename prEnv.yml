@@ -16,8 +16,7 @@ targets:
               duration: 30
               unit: MINUTES
 manifests:
-  - path: pxbbq-demo/pxbbq.yaml
-    targets: [dev]
+  - path: pxbbq-demo/pxbbq-internal.yml
 strategies:
   myCanary:
     canary:
