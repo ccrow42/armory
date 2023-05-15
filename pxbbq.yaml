@@ -28,6 +28,9 @@ targets:
     constraints:
       dependsOn:
       - "Migrate Prod DB To Staging"
+      afterDeployment:
+      - runWebhook:
+          name: Integration_Tests
 
 manifests:
   - path: pxbbq-demo/mongodb.yaml
@@ -78,4 +81,19 @@ webhooks:
     networkMode: remoteNetworkAgent
     retryCount: 3
     uriTemplate: http://cmd-hook.armory-rna:8081/cmd
+  - bodyTemplate:
+      inline: |-
+        { "event_type": "integrationTests", "client_payload": {
+            "callbackUri": "{{armory.callbackUri}}/callback", "service":"{{	armory.preview.potato-facts-internal}}"
+            }
+        }
+    headers:
+      - key: Authorization
+        value: token {{secrets.github_token}}
+      - key: Content-Type
+        value: application/json
+    method: POST
+    name: Integration_Tests
+    retryCount: 3
+    uriTemplate: https://api.github.com/repos/ccrow42/armory/dispatches
 
