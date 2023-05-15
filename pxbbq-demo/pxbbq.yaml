@@ -28,7 +28,7 @@ spec:
               name: mdb01-creds
               key: password
         - name: MONGO_NODES
-          value: "mdb01-pxbbq-0-vip,mdb01-pxbbq-1-vip"
+          value: "mdb01-pxbbq-0-vip.pxbbq,mdb01-pxbbq-1-vip.pxbbq"# adding .pxbbq so we can go cross-namespace.
         - name: MONGO_USER
           value: "pxbbquser"
         - name: MONGO_PASS
