@@ -3,24 +3,18 @@ kind: kubernetes
 application: pxbbq
 
 targets:
-  "Migrate Prod DB To Dev":
-    account: eks03-prod
-    namespace: portworx
-    strategy: myCanary
-    constraints:
-      afterDeployment:
-      - runWebhook:
-          name: Wait for DB Migration
-      beforeDeployment:
-      - runWebhook:
-          name: Delete DB Migration
   dev:
     account: eks01-stage
     namespace: pxbbq-pr-
     strategy: myCanary
     constraints:
-      dependsOn:
-      - "Migrate Prod DB To Dev"
+      afterDeployment:
+      -  exposeServices:
+            services:
+              - pxbbq-svc
+            ttl:
+              duration: 30
+              unit: MINUTES
 manifests:
   - path: pxbbq-demo/mongodb.yaml
     targets: [dev]
@@ -34,31 +28,3 @@ strategies:
       steps:
         - setWeight:
             weight: 100
-            
-webhooks: 
-  - agentIdentifier: eks03-prod
-    bodyTemplate:
-      inline: |-
-        { "cmd": "kubectl",
-          "arg": "wait -n=portworx migration/migrate01 --for=jsonpath={.status.status}=Successful --timeout=30m",
-          "callbackURL": "{{armory.callbackUri}}/callback"
-         }
-    method: POST
-    name: Wait for DB Migration
-    networkMode: remoteNetworkAgent
-    retryCount: 3
-    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
-  - agentIdentifier: eks03-prod
-    bodyTemplate:
-      inline: |-
-        { "cmd": "kubectl",
-          "arg": "delete -n=portworx migration/migrate01 --ignore-not-found=true -o name",
-          "callbackURL": "{{armory.callbackUri}}/callback"
-         }
-    method: POST
-    name: Delete DB Migration
-    networkMode: remoteNetworkAgent
-    retryCount: 3
-    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
-
-
