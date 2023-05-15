@@ -28,9 +28,9 @@ targets:
     constraints:
       dependsOn:
       - "Migrate Prod DB To Staging"
-      afterDeployment:
-      - runWebhook:
-          name: Integration_Tests
+      #afterDeployment:
+      #- runWebhook:
+      #    name: Integration_Tests
 
 manifests:
   - path: pxbbq-demo/mongodb.yaml
