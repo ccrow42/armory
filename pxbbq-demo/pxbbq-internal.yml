@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment                 
+metadata:
+  name: pxbbq-web  
+  namespace: pxbbq         
+spec:
+  replicas: 1                    
+  selector:
+    matchLabels:
+      app: pxbbq-web
+  template:                      
+    metadata:
+      labels:                    
+        app: pxbbq-web
+    spec:                        
+      containers:
+      - name: pxbbq
+        image: eshanks16/pxbbq:v3.2
+        env:
+        - name: MONGO_PORT
+          value: "27017"
+        - name: MONGO_INIT_USER
+          value: "pds"
+        - name: MONGO_INIT_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mdb01-creds
+              key: password
+        - name: MONGO_NODES
+          value: "mdb01-pxbbq-0-vip.pxbbq,mdb01-pxbbq-1-vip.pxbbq"# adding .pxbbq so we can go cross-namespace.
+        - name: MONGO_USER
+          value: "pxbbquser"
+        - name: MONGO_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mdb01-creds
+              key: password
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pxbbq-svc
+  namespace: pxbbq
+  labels:
+    app: pxbbq-web
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: pxbbq-web
