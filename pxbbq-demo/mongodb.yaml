@@ -5,6 +5,7 @@ metadata:
   namespace: "pxbbq"
   labels: 
     app: "mongo-db"
+    pxmigrate: "true" 
 spec: 
   accessModes: 
     - ReadWriteOnce
