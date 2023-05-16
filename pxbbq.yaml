@@ -80,7 +80,7 @@ webhooks:
   - bodyTemplate:
       inline: |-
         { "event_type": "integrationTests", "client_payload": {
-            "callbackUri": "{{armory.callbackUri}}/callback", "service":"{{	armory.preview.potato-facts-internal}}"
+            "callbackUri": "{{armory.callbackUri}}/callback"
             }
         }
     headers:
