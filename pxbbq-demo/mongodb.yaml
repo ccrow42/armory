@@ -1,38 +1,76 @@
-apiVersion: deployments.pds.io/v1
-kind: Mongodb
+apiVersion: "v1"
+kind: "PersistentVolumeClaim"
+metadata: 
+  name: "mongodb-pvc"
+  namespace: "pxbbq"
+  labels: 
+    app: "mongo-db"
+spec: 
+  accessModes: 
+    - ReadWriteOnce
+  resources: 
+    requests: 
+      storage: 5Gi
+  storageClassName: px-db
+---
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: mongo
   labels:
-    #name: mdb01
-    namespace: pxbbq
-    #pds/deployment-id: 01838802-2963-4811-9524-be1cf860a858
-    #pds/deployment-name: mdb01
-    #pds/environment: pxbbq
-    #pds/project-id: ef41cd33-3726-4392-b068-a54978daade9
-  name: mdb01
+    app.kubernetes.io/name: mongo
+    app.kubernetes.io/component: backend
   namespace: pxbbq
 spec:
-  dnsZone: sales-prod.pds-dns.io
-  image: docker.io/portworx/pds-mongodb
-  imageBuild: c43b0e4
-  initialize: Once
-  nodes: 1
-  resources:
-    limits:
-      cpu: "2"
-      memory: 4G
-    requests:
-      cpu: "1"
-      memory: 2G
-      storage: 100G
-  serviceType: ClusterIP
-  storageClass:
-    provisioner: pxd.portworx.com
-  storageOptions:
-    filesystem: ext4
-    forceSpread: "false"
-    replicas: "2"
-    secure: "false"
-  tlsEnabled: false
-  tlsIssuer: ""
-  version: 6.0.3-c43b0e4
-  versionName: 6.0.3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mongo
+      app.kubernetes.io/component: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mongo
+        app.kubernetes.io/component: backend
+    spec:
+      containers:
+      - name: mongo
+        image: mongo
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: porxie
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: "porxie"
+        args:
+          - --bind_ip
+          - 0.0.0.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-data-dir
+          mountPath: /data/db
+      volumes:
+      - name: mongo-data-dir
+        persistentVolumeClaim:
+          claimName: mongodb-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app.kubernetes.io/name: mongo
+    app.kubernetes.io/component: backend
+  namespace: pxbbq
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: mongo
+    app.kubernetes.io/component: backend

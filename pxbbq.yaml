@@ -4,14 +4,14 @@ application: pxbbq
 
 targets:
   production:
-    account: eks03-prod
+    account: cluster01
     namespace: pxbbq
     strategy: myCanary
     constraints:
       dependsOn:
       - staging
   "Migrate Prod DB To Staging":
-    account: eks03-prod
+    account: cluster01
     namespace: portworx
     strategy: myCanary
     constraints:
@@ -22,7 +22,7 @@ targets:
       - runWebhook:
           name: Delete DB Migration
   staging:
-    account: eks01-stage
+    account: cluster02
     namespace: pxbbq
     strategy: myCanary
     constraints:
@@ -52,7 +52,7 @@ strategies:
             weight: 100
             
 webhooks: 
-  - agentIdentifier: eks03-prod
+  - agentIdentifier: cluster01
     bodyTemplate:
       inline: |-
         { "cmd": "kubectl",
@@ -69,7 +69,7 @@ webhooks:
     networkMode: remoteNetworkAgent
     retryCount: 3
     uriTemplate: http://cmd-hook.armory-rna:8081/cmd
-  - agentIdentifier: eks03-prod
+  - agentIdentifier: cluster01
     bodyTemplate:
       inline: |-
         { "cmd": "kubectl",
