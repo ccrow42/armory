@@ -39,6 +39,7 @@ manifests:
     targets: [production,staging]
   - path: pxbbq-demo/migrate.yaml
     targets: ['Migrate Prod DB To Staging']
+    
   
 strategies:
   myCanary:
