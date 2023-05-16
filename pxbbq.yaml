@@ -44,6 +44,9 @@ strategies:
   myCanary:
     canary:
       steps:
+        - exposeServices:
+            services:
+              - pxbbq-svc
         - setWeight:
             weight: 50
         #- pause:
