@@ -27,9 +27,9 @@ targets:
     constraints:
       dependsOn:
       - "Migrate Prod DB To Staging"
-      #afterDeployment:
-      #- runWebhook:
-      #    name: Integration_Tests
+      afterDeployment:
+      - runWebhook:
+          name: Integration_Tests
 
 manifests:
   #- path: pxbbq-demo/mongodb.yaml
@@ -85,7 +85,7 @@ webhooks:
         }
     headers:
       - key: Authorization
-        value: token {{secrets.github_token}}
+        value: token {{secrets.Github_token}}
       - key: Content-Type
         value: application/json
     method: POST
