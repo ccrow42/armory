@@ -4,11 +4,11 @@ application: demo-utilities
 
 targets:
   eks03-prod-cmd-hook:
-    account: eks03-prod
+    account: cluster01
     namespace: armory-rna
     strategy: rolling
   eks01-stage-cmd-hook:
-    account: eks01-stage
+    account: cluster02
     namespace: armory-rna
     strategy: rolling
 

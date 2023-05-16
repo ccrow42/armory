@@ -4,7 +4,7 @@ application: pxbbq
 
 targets:
   dev:
-    account: eks01-stage
+    account: cluster02
     namespace: pxbbq-pr-
     strategy: myCanary
     constraints:
