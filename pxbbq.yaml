@@ -32,8 +32,8 @@ targets:
       #    name: Integration_Tests
 
 manifests:
-  - path: pxbbq-demo/mongodb.yaml
-    targets: [production,staging]
+  #- path: pxbbq-demo/mongodb.yaml
+  #  targets: [production,staging]
   - path: pxbbq-demo/pxbbq.yaml
     targets: [production,staging]
   - path: pxbbq-demo/migrate.yaml
