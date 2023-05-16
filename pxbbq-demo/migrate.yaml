@@ -10,5 +10,5 @@ spec:
   namespaces:
     - pxbbq
   purgeDeletedResources: false
-  excludeSelectors: 
-    app: pxbbq-web
+  selectors: 
+    pxmigrate: "true"
