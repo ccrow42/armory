@@ -1,7 +1,6 @@
 version: v1
 kind: kubernetes
 application: pxbbq
-
 targets:
   production:
     account: cluster01
