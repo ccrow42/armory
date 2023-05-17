@@ -97,6 +97,18 @@ webhooks:
     name: Integration_Tests
     retryCount: 3
     uriTemplate: https://api.github.com/repos/ccrow42/armory/dispatches
-
+  - agentIdentifier: cluster02
+    bodyTemplate:
+      inline: |-
+        { "cmd": "kubectl",
+          "arg": "scale -n=pxbbq statefulset mongo --replicas=0",
+          "callbackURL": "{{armory.callbackUri}}/callback"
+         }
+         #scale -n=pxbbq rs -l app=pxbbq-web --replicas=0
+    method: POST
+    name: Scale Down Staging
+    networkMode: remoteNetworkAgent
+    retryCount: 3
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd    
 
 
