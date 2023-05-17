@@ -101,7 +101,7 @@ webhooks:
     bodyTemplate:
       inline: |-
         { "cmd": "kubectl",
-          "arg": "scale -n=pxbbq deployment pxbbq-web --replicas=0",
+          "arg": "scale -n=pxbbq rs -l app=pxbbq-web --replicas=0",
           "callbackURL": "{{armory.callbackUri}}/callback"
          }
     method: POST
