@@ -20,6 +20,8 @@ targets:
       beforeDeployment:
       - runWebhook:
           name: Delete DB Migration
+      - runWebhook:
+          name: Scale Down Staging
   staging:
     account: cluster02
     namespace: pxbbq
@@ -95,6 +97,6 @@ webhooks:
     name: Integration_Tests
     retryCount: 3
     uriTemplate: https://api.github.com/repos/ccrow42/armory/dispatches
-#deploy 202305170943
+
 
 
