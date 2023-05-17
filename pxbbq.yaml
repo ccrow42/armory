@@ -20,6 +20,8 @@ targets:
       beforeDeployment:
       - runWebhook:
           name: Delete DB Migration
+      - runWebhook:
+          name: Scale Down Staging
   staging:
     account: cluster02
     namespace: pxbbq
@@ -95,6 +97,19 @@ webhooks:
     name: Integration_Tests
     retryCount: 3
     uriTemplate: https://api.github.com/repos/ccrow42/armory/dispatches
+  - agentIdentifier: cluster02
+    bodyTemplate:
+      inline: |-
+        { "cmd": "kubectl",
+          "arg": "scale -n=pxbbq deployment pxbbq-web --replicas=0",
+          "callbackURL": "{{armory.callbackUri}}/callback"
+         }
+    method: POST
+    name: Scale Down Staging
+    networkMode: remoteNetworkAgent
+    retryCount: 3
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
+    
 
 
 
