@@ -108,8 +108,7 @@ webhooks:
     name: Scale Down Staging
     networkMode: remoteNetworkAgent
     retryCount: 3
-    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
-    
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd    
 
 
 
