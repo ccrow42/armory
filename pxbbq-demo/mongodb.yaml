@@ -1,19 +1,19 @@
-apiVersion: "v1"
-kind: "PersistentVolumeClaim"
-metadata: 
-  name: "mongodb-pvc"
-  namespace: "pxbbq"
-  labels: 
-    app: "mongo-db"
-    pxmigrate: "true" 
-spec: 
-  accessModes: 
-    - ReadWriteMany
-  resources: 
-    requests: 
-      storage: 5Gi
-  storageClassName: px-db
----
+#apiVersion: "v1"
+#kind: "PersistentVolumeClaim"
+#metadata: 
+#  name: "mongodb-pvc"
+#  namespace: "pxbbq"
+#  labels: 
+#    app: "mongo-db"
+#    pxmigrate: "true" 
+#spec: 
+#  accessModes: 
+#    - ReadWriteMany
+#  resources: 
+#    requests: 
+#      storage: 5Gi
+#  storageClassName: px-db
+#---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
