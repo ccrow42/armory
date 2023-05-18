@@ -2,8 +2,8 @@ name: Deploy PR Branch
 
 on: 
   push: 
-    branches:
-      - '!master'  
+    branches-ignore:
+      - master
 jobs:
   build:
     name: deploy from main
