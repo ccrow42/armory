@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bbq-taster-deployment
+  namespace: pxbbq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bbq-taster
+  template:
+    metadata:
+      labels:
+        app: bbq-taster
+    spec:
+      containers:
+      - name: bbq-taster
+        image: ccrow42/bbq-taster:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_USER
+          value: "porxie"
+        - name: MONGO_PASS
+          value: "porxie"
+        - name: MONGO_NODE
+          value: "mongo"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bbq-taster-service
+  namespace: pxbbq
+spec:
+  selector:
+    app: bbq-taster
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+  type: ClusterIP

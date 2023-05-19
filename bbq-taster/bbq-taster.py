@@ -2,6 +2,7 @@ from flask import Flask
 import pymongo
 import urllib.parse
 import os
+import random
 
 #username = urllib.parse.quote_plus('porxie')
 #password = urllib.parse.quote_plus('porxie')
@@ -29,13 +30,12 @@ def get_document_count(database_name, collection_name):
     return document_count
 
 # Use the function
-docCount = get_document_count("porxbbq", "orders")
-
 
 @app.route('/')
-def hello_geek():
-    return ("%s orders served from PorxBBQ" % docCount)
+def armory_random():
+    docCount = get_document_count("porxbbq", "orders")
+    code = random.choice([200,404])
+    return ("%s orders served from PorxBBQ" % docCount), code
 
-print ("%s orders served from PorxBBQ" % docCount)
 app.run(host='0.0.0.0')
 

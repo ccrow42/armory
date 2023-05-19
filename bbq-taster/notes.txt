@@ -1,0 +1,17 @@
+export MONGO_USER='porxie'
+export MONGO_PASS='porxie'
+export MONGO_NODE='10.0.236.30'
+
+
+Stop all the containers
+
+docker stop $(docker ps -a -q)
+
+Remove all the containers
+
+docker rm $(docker ps -a -q)
+
+
+docker build -t ccrow42/bbq-taster:latest .
+
+docker run --name bbq-taster -e MONGO_USER='porxie' -e MONGO_PASS='porxie' -e MONGO_NODE='10.0.236.30' -p 5000:5000 ccrow42/bbq-taster:latest
