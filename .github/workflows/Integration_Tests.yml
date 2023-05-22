@@ -18,7 +18,7 @@ jobs:
       - name: Extract mongo image
         id: extract_mongo_image
         run: |
-          image=$(yq e '.spec.template.spec.containers[] | select(.name == "mongo") | .image' pxbbq-demo/mongo.yaml | head -n 1)
+          image=$(yq '.spec.template.spec.containers[] | select(.name == "mongo") | .image' pxbbq-demo/mongo.yaml | head -n 1)
           echo "mongoImage=${image}" >> $GITHUB_ENV
 
       - name: Evaluate mongoImage
