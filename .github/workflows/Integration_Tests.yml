@@ -13,9 +13,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Setup yq
-        uses: chrisdickinson/setup-yq@v1
-        with:
-          yq-version: 4.x
+        uses: chrisdickinson/setup-yq@latest
 
       - name: Extract mongo image
         id: extract_mongo_image
