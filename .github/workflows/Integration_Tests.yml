@@ -15,6 +15,10 @@ jobs:
       - name: Setup yq
         uses: chrisdickinson/setup-yq@latest
 
+      - name: Show folks how to run YQ:
+        run: |
+          yq --help
+
       - name: Extract mongo image
         id: extract_mongo_image
         run: |
