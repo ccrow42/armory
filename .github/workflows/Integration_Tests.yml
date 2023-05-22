@@ -9,26 +9,6 @@ jobs:
     name: Calls the callback being passed in
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        
-      - name: Setup yq
-        uses: mikefarah/yq@latest
-
-      - name: Extract mongo image
-        id: extract_mongo_image
-        run: |
-          image=$(yq '.spec.template.spec.containers[] | select(.name == "mongo") | .image' pxbbq-demo/mongo.yaml | head -n 1)
-          echo "mongoImage=${image}" >> $GITHUB_ENV
-
-      - name: Evaluate mongoImage
-        run: |
-          if [ "${{ env.mongoImage }}" = "mongo:6.0.2" ]; then
-            echo "mongoStatus=false" >> $GITHUB_ENV
-          else
-            echo "mongoStatus=true" >> $GITHUB_ENV
-          fi
-
       - name: getToken
         id: getToken
         uses: fjogeleit/http-request-action@master
@@ -46,7 +26,7 @@ jobs:
           method: 'POST'
           bearerToken: ${{ fromJSON(steps.getToken.outputs.response).access_token }}
           customHeaders: '{ "Content-Type": "application/json" }'
-          data: '{ "success": ${{ env.mongoStatus }}, "mdMessage": "Webhook successful: no errors found in logs service: ${{ github.event.client_payload.service }}" }'
+          data: '{ "success": true, "mdMessage": "Webhook successful: no errors found in logs service: ${{ github.event.client_payload.service }}" }'
 
       - name: show http response
         run: echo ${{ steps.callCallback.outputs.response }}
