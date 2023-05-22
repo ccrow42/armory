@@ -13,11 +13,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Setup yq
-        uses: chrisdickinson/setup-yq@latest
-
-      - name: Show folks how to run YQ:
-        run: |
-          yq --help
+        uses: mikefarah/yq@latest
 
       - name: Extract mongo image
         id: extract_mongo_image
