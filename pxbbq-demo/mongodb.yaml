@@ -36,7 +36,7 @@ spec:
     spec:
       containers:
       - name: mongo
-        image: mongo:6.0.3
+        image: mongo:6.0.1
         env:
           - name: MONGO_INITDB_ROOT_USERNAME
             value: porxie
