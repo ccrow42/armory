@@ -38,6 +38,8 @@ manifests:
     targets: [production,staging]
   - path: pxbbq-demo/pxbbq.yaml
     targets: [production,staging]
+  - path: pxbbq-demo/mongodb-prometheus-exporter.yml
+    targets: [production]
   - path: pxbbq-demo/migrate.yaml
     targets: ['Migrate Prod DB To Staging']
     
