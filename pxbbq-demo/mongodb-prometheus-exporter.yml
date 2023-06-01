@@ -1,4 +1,4 @@
-#helm template pxbbq-exporter prometheus-community/prometheus-mongodb-exporter --set mongdodb.uri=mongodb://porxie:porxie@mongo:27017
+#helm template pxbbq-exporter prometheus-community/prometheus-mongodb-exporter --set mongodb.uri=mongodb://porxie:porxie@mongo:27017
 ---
 # Source: prometheus-mongodb-exporter/templates/serviceaccount.yaml
 apiVersion: v1
@@ -25,7 +25,7 @@ metadata:
     app.kubernetes.io/managed-by: Helm
 type: Opaque
 data:
-  mongodb-uri: bW9uZ29kYjovL21vbmdvZGI6MjcwMTc=
+  mongodb-uri: bW9uZ29kYjovL3BvcnhpZTpwb3J4aWVAbW9uZ286MjcwMTc=
 ---
 # Source: prometheus-mongodb-exporter/templates/service.yaml
 apiVersion: v1
@@ -73,7 +73,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: 1fa88ea61fbb448748fc3861df568e243732fefb13c797a85bb34227505177e2
+        checksum/config: d412edbdbdafc59d7b0eb98d8f99cec433a743ee923cbb2e377f30213a8bdce4
       labels:
         app.kubernetes.io/name: prometheus-mongodb-exporter
         app.kubernetes.io/instance: pxbbq-exporter
