@@ -5,14 +5,14 @@ targets:
   production:
     account: cluster01
     namespace: pxbbq
-    strategy: myCanary
+    strategy: prod-canary
     constraints:
       dependsOn:
       - staging
   "Migrate Prod DB To Staging":
     account: cluster01
     namespace: portworx
-    strategy: myCanary
+    strategy: rollingUpdate
     constraints:
       afterDeployment:
       - runWebhook:
@@ -25,7 +25,7 @@ targets:
   staging:
     account: cluster02
     namespace: pxbbq
-    strategy: myCanary
+    strategy: rollingUpdate
     constraints:
       dependsOn:
       - "Migrate Prod DB To Staging"
@@ -43,12 +43,28 @@ manifests:
     
   
 strategies:
-  myCanary:
+  rollingUpdate:
     canary:
       steps:
         - exposeServices:
             services:
               - pxbbq-svc
+        - setWeight:
+            weight: 100
+  prod-canary:
+    canary:
+      steps:
+        - exposeServices:
+            services:
+              - pxbbq-svc
+        - setWeight:
+            weight: 50
+        - analysis:
+          interval: 10
+          units: seconds
+          numberOfJudgmentRuns: 1
+          queries:
+          - avgCPUUsage-pass
         - setWeight:
             weight: 100
             
@@ -105,10 +121,15 @@ webhooks:
     name: Scale Down Staging
     networkMode: remoteNetworkAgent
     retryCount: 3
-    uriTemplate: http://cmd-hook.armory-rna:8081/cmd    
-# update 202305171319
-# another update
-# update 2
-# update 3
-# update 4
-# update 5
+    uriTemplate: http://cmd-hook.armory-rna:8081/cmd
+    
+analysis:  # Canary analysis queries and thresholds
+  defaultMetricProviderName: prod-prometheus
+  queries:
+    - name: avgCPUUsage-pass
+      upperLimit: 10000 #3
+      lowerLimit: 0
+      queryTemplate: >-
+        avg (avg_over_time(container_cpu_system_seconds_total{job="kubelet"}[{{armory.promQlStepInterval}}]) * on (pod)  group_left (annotation_app)
+        sum(kube_pod_annotations{job="kube-state-metrics",annotation_deploy_armory_io_replica_set_name="{{armory.replicaSetName}}"})
+        by (annotation_app, pod)) by (annotation_app) OR on() vector(0)
