@@ -67,6 +67,7 @@ strategies:
             numberOfJudgmentRuns: 1
             queries:
             - avgCPUUsage-pass
+            - mongodb-warnings
         - setWeight:
             weight: 100
             
@@ -133,5 +134,12 @@ analysis:  # Canary analysis queries and thresholds
       lowerLimit: 0
       queryTemplate: >-
         avg (avg_over_time(container_cpu_system_seconds_total{job="kubelet"}[{{armory.promQlStepInterval}}]) * on (pod)  group_left (annotation_app)
+        sum(kube_pod_annotations{job="kube-state-metrics",annotation_deploy_armory_io_replica_set_name="{{armory.replicaSetName}}"})
+        by (annotation_app, pod)) by (annotation_app) OR on() vector(0)
+    - name: mongodb-warnings
+      upperLimit: 0
+      lowerLimit: 0
+      queryTemplate: >-
+        avg (avg_over_time(mongodb_asserts_total{type="warning"}[{{armory.promQlStepInterval}}]) * on (pod)  group_left (annotation_app)
         sum(kube_pod_annotations{job="kube-state-metrics",annotation_deploy_armory_io_replica_set_name="{{armory.replicaSetName}}"})
         by (annotation_app, pod)) by (annotation_app) OR on() vector(0)
