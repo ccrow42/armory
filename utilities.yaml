@@ -12,6 +12,8 @@ targets:
     namespace: prometheus
     strategy: rolling
     constraints:
+      dependsOn:
+      - prod-cmd-hook
       beforeDeployment:
       - runWebhook: # provided prometheus config can only run 1 pod at a time, so this ensures that is all that happens also means if the PV runs out ofspace, redeploying fixes it.
           name: Delete namespace
