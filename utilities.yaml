@@ -3,18 +3,24 @@ kind: kubernetes
 application: demo-utilities
 
 targets:
-  eks03-prod-cmd-hook:
+  prod-cmd-hook:
     account: cluster01
     namespace: armory-rna
     strategy: rolling
-  eks01-stage-cmd-hook:
+  prod-prometheus:
+    account: cluster01
+    namespace: prometheus
+    strategy: rolling
+  stage-cmd-hook:
     account: cluster02
     namespace: armory-rna
     strategy: rolling
 
 manifests:
   - path: utilities/cmdhook.yml
-    targets: ['eks03-prod-cmd-hook','eks01-stage-cmd-hook']
+    targets: ['prod-cmd-hook','stage-cmd-hook']
+  - path: utilities/prometheus.yml
+    targets: ['prod-prometheus']
   
 strategies:
   rolling:
