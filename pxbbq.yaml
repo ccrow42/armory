@@ -60,11 +60,11 @@ strategies:
         - setWeight:
             weight: 50
         - analysis:
-          interval: 10
-          units: seconds
-          numberOfJudgmentRuns: 1
-          queries:
-          - avgCPUUsage-pass
+            interval: 10
+            units: seconds
+            numberOfJudgmentRuns: 1
+            queries:
+            - avgCPUUsage-pass
         - setWeight:
             weight: 100
             
