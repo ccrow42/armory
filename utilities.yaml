@@ -11,6 +11,14 @@ targets:
     account: cluster01
     namespace: prometheus
     strategy: rolling
+    constraints:
+      afterDeployment:
+      - analysis: # ensure prometheus works...
+          interval: 10
+          units: seconds
+          numberOfJudgmentRuns: 1
+          queries:
+          - avgCPUUsage-pass
   stage-cmd-hook:
     account: cluster02
     namespace: armory-rna
@@ -28,3 +36,13 @@ strategies:
       steps:
         - setWeight:
             weight: 100
+analysis:  # Canary analysis queries and thresholds
+  defaultMetricProviderName: prod-prometheus
+  queries:
+    - name: avgCPUUsage-pass
+      upperLimit: 10000 #3
+      lowerLimit: 0
+      queryTemplate: >-
+        avg (avg_over_time(container_cpu_system_seconds_total{job="kubelet"}[{{armory.promQlStepInterval}}]) * on (pod)  group_left (annotation_app)
+        sum(kube_pod_annotations{job="kube-state-metrics",annotation_deploy_armory_io_replica_set_name="{{armory.replicaSetName}}"})
+        by (annotation_app, pod)) by (annotation_app) OR on() vector(0)
