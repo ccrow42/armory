@@ -50,10 +50,6 @@ strategies:
             services:
               - pxbbq-svc
         - setWeight:
-            weight: 50
-        #- pause:
-        #    untilApproved: true
-        - setWeight:
             weight: 100
             
 webhooks: 
@@ -61,7 +57,7 @@ webhooks:
     bodyTemplate:
       inline: |-
         { "cmd": "kubectl",
-          "arg": "wait -n=portworx migration/migrate01 --for=jsonpath={.status.stage}=Final --timeout=10m",
+          "arg": "wait -n={{armory.namespace}} migration/migrate01 --for=jsonpath={.status.stage}=Final --timeout=10m",
           "callbackURL": "{{armory.callbackUri}}/callback"
          }
       # todo: switch to {.status.status}=Successful 
@@ -74,7 +70,7 @@ webhooks:
     bodyTemplate:
       inline: |-
         { "cmd": "kubectl",
-          "arg": "delete -n=portworx migration/migrate01 --ignore-not-found=true -o name",
+          "arg": "delete -n={{armory.namespace}} migration/migrate01 --ignore-not-found=true -o name",
           "callbackURL": "{{armory.callbackUri}}/callback"
          }
     method: POST
