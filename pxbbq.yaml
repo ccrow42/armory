@@ -76,7 +76,7 @@ strategies:
             numberOfJudgmentRuns: 1
             queries:
             - avgCPUUsage-pass
-            #- mongodb-warnings-fail # mongobd-warning-fail 
+            - mongodb-warnings-fail # mongobd-warning-fail 
             
 webhooks: 
   - agentIdentifier: cluster01
