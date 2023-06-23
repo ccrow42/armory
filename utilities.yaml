@@ -30,6 +30,8 @@ targets:
     strategy: rolling
 
 manifests:
+  - path: pxbbq-demo/mongodb-pvc.yaml
+    targets: [prod-cmd-hook]
   - path: utilities/cmdhook.yml
     targets: ['prod-cmd-hook','stage-cmd-hook']
   - path: utilities/prometheus.yml
