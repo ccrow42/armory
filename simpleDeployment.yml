@@ -1,0 +1,17 @@
+version: v1
+kind: kubernetes
+application: pxbbq
+targets:
+  production:
+    account: cluster01
+    namespace: pxbbq
+    strategy: prod-canary
+manifests:
+  - path: pxbbq-demo/mongodb.yaml
+    targets: [production]
+strategies:
+  prod-canary:
+    canary:
+      steps:
+        - setWeight:
+            weight: 100
