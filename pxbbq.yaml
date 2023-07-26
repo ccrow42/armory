@@ -68,7 +68,7 @@ strategies:
             interval: 10
             units: seconds
             numberOfJudgmentRuns: 1
-            #rollForwardMode: manual
+            rollForwardMode: manual
             queries:
             - avgCPUUsage-pass
             - mongodb-warnings
@@ -77,7 +77,7 @@ strategies:
         - analysis:
             interval: 10
             units: seconds
-            #rollBackMode: manual
+            rollBackMode: manual
             numberOfJudgmentRuns: 1
             queries:
             - avgCPUUsage-pass
