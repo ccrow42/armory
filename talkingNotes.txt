@@ -1,0 +1,11 @@
+# Introduce myself
+# Overview of the use case
+# Walk through the Presentation
+# Show an overview
+# Demo
+#   Show the porx bbq app and login, make an order
+#   Kick off the demo by upgrading MongoDB to 6.0.2
+#   Walk through the integrity test process and why it failed
+#   Deploy 6.0.3
+#   Talk about canary deployment
+# Walk through the Armory deployment manifest
