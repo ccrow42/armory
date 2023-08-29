@@ -163,3 +163,7 @@ analysis:  # Canary analysis queries and thresholds
         sum(kube_pod_annotations{job="kube-state-metrics",annotation_deploy_armory_io_replica_set_name="{{armory.replicaSetName}}"})
         by (annotation_app, pod)) by (annotation_app) OR on() vector({{ armory.startTimeEpochSeconds }})
 #update4
+
+
+deploymentConfig:
+  keepDeploymentObject: true
