@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: mongo
-        image: mongo:6.0.3 # 6.0.1 and 6.0.3 are good, 6.0.2 is bad. update
+        image: mongo:6.0.1 # 6.0.1 and 6.0.3 are good, 6.0.2 is bad. update
         env:
           - name: MONGO_INITDB_ROOT_USERNAME
             value: porxie
